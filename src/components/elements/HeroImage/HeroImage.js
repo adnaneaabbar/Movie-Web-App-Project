@@ -4,7 +4,7 @@ import './HeroImage.css';
 const HeroImage = (props) => {
     return (
         <div>
-            HeroImage
+        HeroImage
         </div>
     )
 }
