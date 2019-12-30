@@ -28,7 +28,16 @@ class Home extends Component {
         fetch(endpoint)
         .then(result => result.json())
         .then(result => {
-            console.log(result);
+            this.setState({
+                //spread syntax
+                movies: [...this.state.movies, ...result.results],
+                //if the heroImage is not null it will return it, else it will fill it with the first movie in the API fetch
+                heroImage: this.state.heroImage || result.results[0],
+                loading: false,
+                //from the returned object result from the API
+                currentPage: result.page,
+                totalPages: result.total_pages
+            })
         })
     }
 
