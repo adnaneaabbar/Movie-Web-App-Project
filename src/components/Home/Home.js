@@ -3,7 +3,7 @@ import {API_URL, API_KEY, IMAGE_BASE_URL, POSTER_SIZE, BACKDROP_SIZE} from '../.
 import HeroImage from '../elements/HeroImage/HeroImage';
 import SearchBar from '../elements/SearchBar/SearchBar';
 import FourColGrid from '../elements/FourColGrid/FourColGrid';
-//import MovieThumb from '../elements/MovieThumb/MovieThumb';
+import MovieThumb from '../elements/MovieThumb/MovieThumb';
 import LoadMoreBtn from '../elements/LoadMoreBtn/LoadMoreBtn';
 import Spinner from '../elements/Spinner/Spinner';
 import './Home.css';
@@ -30,13 +30,13 @@ class Home extends Component {
         this.setState({
             movies: [],
             loading: true,
-            searchTerm: searchTerm
+            searchTerm
         })
 
-        if(searchTerm === '') {
-            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&page=1`;
+        if(searchTerm === "") {
+            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-Us&page=1`;
         } else {
-            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&query=${searchTerm}`;
+            endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-Us&query=${searchTerm}`;
         }
 
         this.fetchItems(endpoint);
@@ -48,10 +48,10 @@ class Home extends Component {
 
         if(this.state.searchTerm === '') {
             //we're not searching so we should get the next page
-            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&page=${this.state.currentPage++}`;
+            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&page=${this.state.currentPage + 1}`;
         } else {
             //we're doing search
-            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&query=${this.state.searchTerm}&page=${this.state.currentPage++}`;
+            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&query=${this.state.searchTerm}&page=${this.state.currentPage + 1}`;
         }
         
         this.fetchItems(endpoint);
@@ -62,12 +62,9 @@ class Home extends Component {
         .then(result => result.json())
         .then(result => {
             this.setState({
-                //spread syntax
                 movies: [...this.state.movies, ...result.results],
-                //if the heroImage is not null it will return it, else it will fill it with the first movie in the API fetch
                 heroImage: this.state.heroImage || result.results[0],
                 loading: false,
-                //from the returned object result from the API
                 currentPage: result.page,
                 totalPages: result.total_pages
             })
@@ -87,7 +84,22 @@ class Home extends Component {
                     />
                     <SearchBar callback={this.searchItems}/> 
                 </div> : null }
-                <FourColGrid/>
+                <div className="rmdb-home-grid">
+                    <FourColGrid
+                        header={this.state.searchTerm ? 'Search Result' : 'Popular Movies'}
+                        loading={this.state.loading}
+                    >
+                        {this.state.movies.map ( (element, i) => {
+                            return <MovieThumb
+                                        key={i}
+                                        clickable={true}
+                                        image={element.poster_path ? `${IMAGE_BASE_URL}${POSTER_SIZE}${element.poster_path}` : './images/no_image.jpg'}
+                                        movieId={element.id}
+                                        movieName={element.original_title}
+                                    />
+                        })}
+                    </FourColGrid>
+                </div>
                 <Spinner/>
                 <LoadMoreBtn/>
             </div>

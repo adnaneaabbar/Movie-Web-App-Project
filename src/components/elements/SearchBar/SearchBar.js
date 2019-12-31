@@ -5,13 +5,13 @@ import './SearchBar.css';
 //controlled component, taking control of the input field 
 class SearchBar extends Component {
     state = {
-        value: '', //input field
+        value: '' //input field
     }
 
     timeout = null;
 
     doSearch = (event) => {
-        this.setState({value: event.target.value}) //value from input field
+        this.setState({value: event.target.value}); //value from input field
         clearTimeout(this.timeout); //clear old timeout
         //assign new timeout
         this.timeout = setTimeout( () => {
