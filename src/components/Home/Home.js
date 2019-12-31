@@ -24,8 +24,25 @@ class Home extends Component {
         this.fetchItems(endpoint);
     }
 
+    searchItems = (searchTerm) => {
+        let endpoint = '';
+        this.setState({
+            movies: [],
+            loading: true,
+            searchTerm: searchTerm
+        })
+
+        if(searchTerm === '') {
+            endpoint = `${API_URL}movie/popular?api_key${API_URL}&language=en-Us&page=1`;
+        } else {
+            endpoint = `${API_URL}movie/popular?api_key${API_URL}&language=en-Us&query${searchTerm}`;
+        }
+
+        this.fetchItems(endpoint);
+    }
+
     loadMoreItems = () => {
-        let endpoint = '',
+        let endpoint = '';
         this.setState({loading: true});
 
         if(this.state.searchTerm === '') {
@@ -59,8 +76,15 @@ class Home extends Component {
     render() {
         return (
             <div className="rmdb-home">
-                <HeroImage/>
-                <SearchBar/>
+            {this.state.heroImage ? 
+                <div>
+                    <HeroImage
+                        image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${this.state.heroImage.backdrop_path}`}
+                        title={this.state.heroImage.original_title}
+                        text={this.state.heroImage.overview}
+                    />
+                    <SearchBar/> 
+                </div> : null }
                 <FourColGrid/>
                 <Spinner/>
                 <LoadMoreBtn/>
