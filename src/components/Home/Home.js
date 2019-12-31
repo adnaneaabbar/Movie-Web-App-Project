@@ -25,6 +25,7 @@ class Home extends Component {
     }
 
     searchItems = (searchTerm) => {
+        console.log(searchTerm);
         let endpoint = '';
         this.setState({
             movies: [],
@@ -33,9 +34,9 @@ class Home extends Component {
         })
 
         if(searchTerm === '') {
-            endpoint = `${API_URL}movie/popular?api_key${API_URL}&language=en-Us&page=1`;
+            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&page=1`;
         } else {
-            endpoint = `${API_URL}movie/popular?api_key${API_URL}&language=en-Us&query${searchTerm}`;
+            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&query=${searchTerm}`;
         }
 
         this.fetchItems(endpoint);
@@ -47,10 +48,10 @@ class Home extends Component {
 
         if(this.state.searchTerm === '') {
             //we're not searching so we should get the next page
-            endpoint = `${API_URL}movie/popular?api_key${API_URL}&language=en-Us&page=${this.state.currentPage++}`;
+            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&page=${this.state.currentPage++}`;
         } else {
             //we're doing search
-            endpoint = `${API_URL}movie/popular?api_key${API_URL}&language=en-Us&query${this.state.searchTerm}&page=${this.state.currentPage++}`;
+            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&query=${this.state.searchTerm}&page=${this.state.currentPage++}`;
         }
         
         this.fetchItems(endpoint);
@@ -71,6 +72,7 @@ class Home extends Component {
                 totalPages: result.total_pages
             })
         })
+        .catch(error => console.log('Error:', error))
     }
 
     render() {
@@ -83,7 +85,7 @@ class Home extends Component {
                         title={this.state.heroImage.original_title}
                         text={this.state.heroImage.overview}
                     />
-                    <SearchBar/> 
+                    <SearchBar callback={this.searchItems}/> 
                 </div> : null }
                 <FourColGrid/>
                 <Spinner/>
