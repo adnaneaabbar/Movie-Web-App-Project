@@ -25,7 +25,6 @@ class Home extends Component {
     }
 
     searchItems = (searchTerm) => {
-        console.log(searchTerm);
         let endpoint = '';
         this.setState({
             movies: [],
@@ -48,10 +47,10 @@ class Home extends Component {
 
         if(this.state.searchTerm === '') {
             //we're not searching so we should get the next page
-            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&page=${this.state.currentPage + 1}`;
+            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-Us&page=${this.state.currentPage + 1}`;
         } else {
             //we're doing search
-            endpoint = `${API_URL}movie/popular?api_key${API_KEY}&language=en-Us&query=${this.state.searchTerm}&page=${this.state.currentPage + 1}`;
+            endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-Us&query=${this.state.searchTerm}&page=${this.state.currentPage + 1}`;
         }
         
         this.fetchItems(endpoint);
@@ -99,9 +98,13 @@ class Home extends Component {
                                     />
                         })}
                     </FourColGrid>
+                    {this.state.loading ? <Spinner/> : null}
+                    {(this.state.currentPage <= this.state.totalPages && !this.state.loading) ? 
+                        <LoadMoreBtn 
+                            text="Load More" 
+                            onClick={this.loadMoreItems}
+                        /> : null }
                 </div>
-                <Spinner/>
-                <LoadMoreBtn/>
             </div>
         )
     }
