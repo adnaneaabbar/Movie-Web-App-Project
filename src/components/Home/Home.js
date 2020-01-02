@@ -29,7 +29,7 @@ class Home extends Component {
         this.setState({
             movies: [],
             loading: true,
-            searchTerm
+            searchTerm: searchTerm
         })
 
         if(searchTerm === "") {

@@ -9,6 +9,48 @@ import Spinner from '../elements/Spinner/Spinner';
 import './Movie.css';
 
 class Movie extends Component {
+    state = {
+        movie: null,
+        actors: null,
+        directors: [],
+        loading: false
+    }
+
+    componentDidMount() {
+        this.setState({loading: true});
+        //first fetch the movie...
+        const endpoint = `${API_URL}movie/${this.props.match.params.movieId}?api_key=${API_KEY}&language=en-US`;
+        this.fetchItems(endpoint);
+    }
+
+    fetchItems = (endpoint) => {
+        fetch(endpoint)
+        .then(result => result.json())
+        .then(result => {
+            
+            if(result.status_code) {
+                this.setState({loading: false});
+            } else {
+                this.setState({movie: result}, () => {
+                    //fetching actors and directors in the callback of setState
+                    const endpoint = `${API_URL}movie/${this.props.match.params.movieId}/credits?api_key=${API_KEY}&language=en-US`;
+                    fetch(endpoint)
+                    .then(result => result.json())
+                    .then(result => {
+                        const directors = result.crew.filter( (member) => member.job === "Director");
+
+                        this.setState({
+                            actors: result.cast,
+                            directors: directors,
+                            loading: false
+                        })
+                    })
+                })
+            }
+        })
+        .catch(error => console.error('Error:', error))
+    }
+
     render() {
         return (
             <div className="rmdb-movie">
