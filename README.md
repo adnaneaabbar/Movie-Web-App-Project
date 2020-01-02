@@ -1,11 +1,14 @@
 # Framework
 
+
 **React & node**.
+
 
 # Quick Start
 
 **$ npm install** 
 for installing dependencies and modules.
+
 **$ npm start** 
 starting the app server on port 3000.
 
