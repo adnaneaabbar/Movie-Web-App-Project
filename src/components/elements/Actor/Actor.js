@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {IMAGE_BASE_URL} from '../../../config';
 import './Actor.css';
 
@@ -16,6 +17,10 @@ const Actor = (props) => {
             <span className="rmdb-actor-character">{props.actor.character}</span>
         </div>
     )
+}
+
+Actor.propTypes = {
+    actor: PropTypes.object
 }
 
 export default Actor;

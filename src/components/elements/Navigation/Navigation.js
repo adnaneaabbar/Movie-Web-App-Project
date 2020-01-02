@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import './Navigation.css';
 
@@ -10,10 +11,14 @@ const Navigation = (props) => {
                     <p>Home</p>
                 </Link>
                 <p>/</p>
-                <p>{props.movie}</p>
+                <p>{props.movieName}</p>
             </div>
         </div>
     )
+}
+
+Navigation.propTypes = {
+    movieName: PropTypes.string
 }
 
 export default Navigation;
