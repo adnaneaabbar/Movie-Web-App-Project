@@ -17,10 +17,16 @@ class Movie extends Component {
     }
 
     componentDidMount() {
-        this.setState({loading: true});
-        //first fetch the movie...
-        const endpoint = `${API_URL}movie/${this.props.match.params.movieId}?api_key=${API_KEY}&language=en-US`;
-        this.fetchItems(endpoint);
+        //saves us from unnecessary API calls if we've already visited the page
+        if(localStorage.getItem(`${this.props.match.params.movieId}`)) {
+            const state = JSON.parse(localStorage.getItem(`${this.props.match.params.movieId}`));
+            this.setState({...state});
+        } else {
+            this.setState({loading: true});
+            //first fetch the movie...
+            const endpoint = `${API_URL}movie/${this.props.match.params.movieId}?api_key=${API_KEY}&language=en-US`;
+            this.fetchItems(endpoint);
+        }
     }
 
     fetchItems = (endpoint) => {
@@ -43,6 +49,8 @@ class Movie extends Component {
                             actors: result.cast,
                             directors: directors,
                             loading: false
+                        }, () => { //local Storage, we store data as strings, when we're not searching
+                            localStorage.setItem(`${this.props.match.params.movieId}`, JSON.stringify(this.state));
                         })
                     })
                 })
