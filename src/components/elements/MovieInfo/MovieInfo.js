@@ -8,7 +8,7 @@ const MovieInfo = (props) => {
     return (
         <div className="rmdb-movieinfo"
             style={{
-                background: props.movie.backdrop.path ? `url('${IMAGE_BASE_URL}${BACKDROP_SIZE}${props.movie.backdrop_path}')` : "#000"
+                background: props.movie.backdrop_path ? `url('${IMAGE_BASE_URL}${BACKDROP_SIZE}${props.movie.backdrop_path}')` : "#000"
             }}
         >
             <div className="rmdb-movieinfo-content">
