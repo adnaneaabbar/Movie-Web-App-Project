@@ -48,37 +48,42 @@ class Home extends Component {
     }
 
     loadMoreItems = () => {
+        //ES6 destructuring the state
+        const {searchTerm, currentPage} = this.state;
         let endpoint = '';
         this.setState({loading: true});
 
-        if(this.statesearchTerm === '') {
+        if(searchTerm === '') {
             //we're not searching so we should get the next page
-            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-Us&page=${this.state.currentPage + 1}`;
+            endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-Us&page=${currentPage + 1}`;
         } else {
             //we're doing search
-            endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-Us&query=${this.state.searchTerm}&page=${this.state.currentPage + 1}`;
+            endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-Us&query=${searchTerm}&page=${currentPage + 1}`;
         }
         
         this.fetchItems(endpoint);
     }
 
-    fetchItems = (endpoint) => {
-        fetch(endpoint)
-        .then(result => result.json())
-        .then(result => {
+    fetchItems = async endpoint => {
+        //ES6 destructuring the state
+        const {movies, heroImage, searchTerm} = this.state;
+        try {
+            //waiting until fetching is done before setting the state
+            const result = await (await fetch(endpoint)).json();        
             this.setState({
-                movies: [...this.state.movies, ...result.results],
-                heroImage: this.state.heroImage || result.results[0],
+                movies: [...movies, ...result.results],
+                heroImage: heroImage || result.results[0],
                 loading: false,
                 currentPage: result.page,
                 totalPages: result.total_pages
             }, () => { //local Storage, we store data as strings, when we're not searching
-                if(this.state.searchTerm === ""){
+                if(searchTerm === ""){
                     localStorage.setItem('HomeStateSave', JSON.stringify(this.state));
                 }
-            })
-        })
-        .catch(error => console.log('Error:', error))
+            });           
+        } catch (error) {
+            console.log("Error: ", error);
+        }
     }
 
     render() {
