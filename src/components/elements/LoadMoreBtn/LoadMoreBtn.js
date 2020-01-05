@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './LoadMoreBtn.css';
 
-const LoadMoreBtn = (props) => {
+const LoadMoreBtn = ({onClick, text}) => {
     return (
-        <div className="rmdb-loadmorebtn" onClick={props.onClick}>
-            <p>{props.text}</p>
+        <div className="rmdb-loadmorebtn" onClick={onClick}>
+            <p>{text}</p>
         </div>
     )
 }

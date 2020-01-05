@@ -11,7 +11,7 @@ const FourColGrid = (props) => {
                     {element}
                 </div>
             )
-        }); //loop through the chikdren
+        }); //loop through the children
         return gridElements;
     }
 

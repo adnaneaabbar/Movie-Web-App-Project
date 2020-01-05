@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import './Navigation.css';
 
-const Navigation = (props) => {
+const Navigation = ({movieName}) => {
     return (
         <div className="rmdb-navigation">
             <div className="rmdb-navigation-content">
@@ -11,7 +11,7 @@ const Navigation = (props) => {
                     <p>Home</p>
                 </Link>
                 <p>/</p>
-                <p>{props.movieName}</p>
+                <p>{movieName}</p>
             </div>
         </div>
     )
