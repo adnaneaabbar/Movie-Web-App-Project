@@ -11,15 +11,21 @@ class SearchBar extends Component {
     timeout = null;
 
     doSearch = (event) => {
+        //ES6 destructuring props
+        const {callback} = this.props;
+
         this.setState({value: event.target.value}); //value from input field
         clearTimeout(this.timeout); //clear old timeout
         //assign new timeout
         this.timeout = setTimeout( () => {
-            this.props.callback(this.state.value); //send value searched for
+            callback(false, this.state.value); //send value searched for
         }, 500); //every half a second we show results
     }
 
     render() {
+        //ES6 destructuring state
+        const {value} = this.state;
+
         return (
             <div className="rmdb-searchbar">
                 <div className="rmdb-searchbar-content">
@@ -29,7 +35,7 @@ class SearchBar extends Component {
                         className="rmdb-searchbar-input"
                         placeholder="Search.."
                         onChange={this.doSearch}
-                        value={this.state.value}
+                        value={value}
                     />
                 </div>
             </div>
